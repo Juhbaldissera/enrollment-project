@@ -20,5 +20,8 @@ export class EnrollStudent {
         if (!this.validateName(enrollmentRequest.student.name)) {
             throw new Error('Invalid student name');
         }
+        if (!validateCpf(enrollmentRequest.student.cpf)) {
+            throw new Error('Invalid student cpf');
+        }
     }
 }
