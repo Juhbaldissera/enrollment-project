@@ -31,4 +31,12 @@ describe('Enroll student', () => {
             }),
         ).toThrow(new Error('Invalid student cpf'));
     });
+
+    it('Should not enroll duplicated student', () => {
+        const enrollStudent = new EnrollStudent();
+        enrollStudent.execute(enrollmentRequestSample);
+        expect(() => enrollStudent.execute(enrollmentRequestSample)).toThrow(
+            new Error('Enrollment with duplicated student is not allowed'),
+        );
+    });
 });
