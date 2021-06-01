@@ -1,38 +1,31 @@
-import { extractDigits, validateCpf } from './validateCpf';
-
-interface Student {
-    name: string;
-    cpf: string;
-}
+import Student from './Student';
 
 export interface EnrollmentRequest {
+    student: {
+        name: string;
+        cpf: string;
+    };
+}
+
+export interface Enrollment {
     student: Student;
 }
 
-const REGEX_VALID_NAME = /^([A-Za-z]+ )+([A-Za-z])+$/;
-
 export class EnrollStudent {
-    private students: Map<string, Student> = new Map<string, Student>();
-
-    private validateName(name: string): boolean {
-        return REGEX_VALID_NAME.test(name);
-    }
+    private enrollments: Enrollment[] = [];
 
     private saveStudent(student: Student): void {
-        const cpf = extractDigits(student.cpf);
-        if (this.students.has(cpf)) {
+        const existingEnrollment = this.enrollments.find(
+            (enrollment) => enrollment.student.cpf.value === student.cpf.value,
+        );
+        if (existingEnrollment) {
             throw new Error('Enrollment with duplicated student is not allowed');
         }
-        this.students.set(cpf, student);
+        this.enrollments.push({ student });
     }
 
     public execute(enrollmentRequest: EnrollmentRequest): void {
-        if (!this.validateName(enrollmentRequest.student.name)) {
-            throw new Error('Invalid student name');
-        }
-        if (!validateCpf(enrollmentRequest.student.cpf)) {
-            throw new Error('Invalid student cpf');
-        }
-        this.saveStudent(enrollmentRequest.student);
+        const student = new Student(enrollmentRequest.student.name, enrollmentRequest.student.cpf);
+        this.saveStudent(student);
     }
 }

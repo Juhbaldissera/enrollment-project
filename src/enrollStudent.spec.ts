@@ -17,7 +17,7 @@ describe('Enroll student', () => {
                     name: 'Ana',
                 },
             }),
-        ).toThrow(new Error('Invalid student name'));
+        ).toThrow(new Error('Invalid name'));
     });
 
     it('Should not enroll without valid student cpf', () => {
@@ -29,7 +29,7 @@ describe('Enroll student', () => {
                     cpf: '123.456.789-99',
                 },
             }),
-        ).toThrow(new Error('Invalid student cpf'));
+        ).toThrow(new Error('Invalid cpf'));
     });
 
     it('Should not enroll duplicated student', () => {
