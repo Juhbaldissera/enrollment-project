@@ -1,4 +1,4 @@
-import { EnrollmentRequest, EnrollStudent } from './enrollStudent';
+import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
 
 describe('Enroll student', () => {
     const enrollmentRequestSample: EnrollmentRequest = {

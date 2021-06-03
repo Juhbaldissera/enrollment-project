@@ -7,7 +7,7 @@ export interface EnrollmentRequest {
     };
 }
 
-export interface Enrollment {
+interface Enrollment {
     student: Student;
 }
 
