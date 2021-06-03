@@ -50,8 +50,7 @@ describe('Enroll student', () => {
 
     it('Should generate enrollment code', () => {
         const enrollStudent = new EnrollStudent();
-        enrollStudent.execute(enrollmentRequestSample);
-        const lastEnrollment = enrollStudent.enrollments[0];
+        const lastEnrollment = enrollStudent.execute(enrollmentRequestSample);
         expect(lastEnrollment.code.value).toEqual('2021EM1J0001');
     });
 

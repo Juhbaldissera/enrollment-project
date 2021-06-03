@@ -1,3 +1,4 @@
+import { Class } from './Class';
 import { Classes } from './Classes';
 import { Code } from './Code';
 import Student from './Student';
@@ -16,23 +17,24 @@ export interface EnrollmentRequest {
 interface Enrollment {
     code: Code;
     student: Student;
+    class: Class;
 }
 
 export class EnrollStudent {
-    public enrollments: Enrollment[];
+    enrollments: Enrollment[];
 
-    constructor(public classes: Classes = new Classes()) {
+    constructor(private classes: Classes = new Classes()) {
         this.enrollments = [];
     }
 
     private getEnrollmentsOfAClass(classCode: string): number {
         const classStudents = this.enrollments.filter(() =>
-            this.enrollments.filter((enrollment) => enrollment.code.classCode === classCode),
+            this.enrollments.filter((enrollment) => enrollment.class.code === classCode),
         );
         return classStudents.length;
     }
 
-    public execute(enrollmentRequest: EnrollmentRequest): void {
+    public execute(enrollmentRequest: EnrollmentRequest): Enrollment {
         const {
             student: { name, cpf, birthDate },
             level,
@@ -51,10 +53,12 @@ export class EnrollStudent {
         if (student.getAge() < existingClass.module.minimumAge) {
             throw new Error('Student below minimum age');
         }
-        if (existingClass.capacity <= this.getEnrollmentsOfAClass(clazz)) {
+        if (existingClass.capacity === this.getEnrollmentsOfAClass(clazz)) {
             throw new Error('Class is over capacity');
         }
         const code = new Code(level, module, clazz, this.enrollments.length + 1);
-        this.enrollments.push({ student, code });
+        const enrollment = { student, code, class: existingClass };
+        this.enrollments.push(enrollment);
+        return enrollment;
     }
 }
