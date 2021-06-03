@@ -25,6 +25,13 @@ export class EnrollStudent {
         this.enrollments = [];
     }
 
+    private getEnrollmentsOfAClass(classCode: string): number {
+        const classStudents = this.enrollments.filter(() =>
+            this.enrollments.filter((enrollment) => enrollment.code.classCode === classCode),
+        );
+        return classStudents.length;
+    }
+
     public execute(enrollmentRequest: EnrollmentRequest): void {
         const {
             student: { name, cpf, birthDate },
@@ -43,6 +50,9 @@ export class EnrollStudent {
         const existingClass = this.classes.find(level, module, clazz);
         if (student.getAge() < existingClass.module.minimumAge) {
             throw new Error('Student below minimum age');
+        }
+        if (existingClass.capacity <= this.getEnrollmentsOfAClass(clazz)) {
+            throw new Error('Class is over capacity');
         }
         const code = new Code(level, module, clazz, this.enrollments.length + 1);
         this.enrollments.push({ student, code });

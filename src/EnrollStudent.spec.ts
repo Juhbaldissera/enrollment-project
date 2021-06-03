@@ -78,4 +78,30 @@ describe('Enroll student', () => {
             }),
         ).toThrow(new Error('Student below minimum age'));
     });
+
+    it('Should not enroll student over class capacity', () => {
+        const enrollStudent = new EnrollStudent();
+        const fakeCPFs = [
+            '655.468.214-77',
+            '094.418.663-77',
+            '317.160.847-25',
+            '785.874.446-11',
+            '116.091.627-65',
+            '901.655.875-63',
+            '126.715.755-05',
+            '229.226.637-79',
+            '411.973.098-02',
+            '470.868.677-30',
+        ];
+        fakeCPFs.forEach((fakeCPF) =>
+            enrollStudent.execute({
+                ...enrollmentRequestSample,
+                student: {
+                    ...enrollmentRequestSample.student,
+                    cpf: fakeCPF,
+                },
+            }),
+        );
+        expect(() => enrollStudent.execute(enrollmentRequestSample)).toThrow(new Error('Class is over capacity'));
+    });
 });
