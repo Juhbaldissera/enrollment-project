@@ -1,4 +1,5 @@
-import { Enrollment, EnrollmentRepository } from './EnrollmentRepository';
+import { Enrollment } from './Enrollment';
+import { EnrollmentRepository } from './EnrollmentRepository';
 
 export class EnrollmentRepositoryMemory implements EnrollmentRepository {
     private enrollments: Enrollment[];

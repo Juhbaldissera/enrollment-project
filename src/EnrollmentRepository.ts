@@ -1,12 +1,4 @@
-import { Class } from './Class';
-import { Code } from './Code';
-import Student from './Student';
-
-export interface Enrollment {
-    code: Code;
-    student: Student;
-    class: Class;
-}
+import { Enrollment } from './Enrollment';
 
 export interface EnrollmentRepository {
     saveEnrollment(enrollment: Enrollment): void;

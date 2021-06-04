@@ -1,6 +1,7 @@
 import { ClassesRepository } from './ClassesRepository';
 import { Code } from './Code';
-import { Enrollment, EnrollmentRepository } from './EnrollmentRepository';
+import { Enrollment } from './Enrollment';
+import { EnrollmentRepository } from './EnrollmentRepository';
 import Student from './Student';
 
 export interface EnrollmentRequest {
@@ -39,7 +40,7 @@ export class EnrollStudent {
             throw new Error('Class is over capacity');
         }
         const code = new Code(level, module, clazz, this.enrollmentRepository.count() + 1);
-        const enrollment = { student, code, class: existingClass };
+        const enrollment = new Enrollment(student, code, existingClass);
         this.enrollmentRepository.saveEnrollment(enrollment);
         return enrollment;
     }
