@@ -1,6 +1,6 @@
-import { Class } from './Class';
 import { Classes } from './Classes';
 import { Code } from './Code';
+import { Enrollment, EnrollmentRepository } from './EnrollmentRepository';
 import Student from './Student';
 
 export interface EnrollmentRequest {
@@ -14,25 +14,8 @@ export interface EnrollmentRequest {
     class: string;
 }
 
-interface Enrollment {
-    code: Code;
-    student: Student;
-    class: Class;
-}
-
 export class EnrollStudent {
-    enrollments: Enrollment[];
-
-    constructor(private classes: Classes = new Classes()) {
-        this.enrollments = [];
-    }
-
-    private getEnrollmentsOfAClass(classCode: string): number {
-        const classStudents = this.enrollments.filter(() =>
-            this.enrollments.filter((enrollment) => enrollment.class.code === classCode),
-        );
-        return classStudents.length;
-    }
+    constructor(private enrollmentRepository: EnrollmentRepository, private classes: Classes = new Classes()) {}
 
     public execute(enrollmentRequest: EnrollmentRequest): Enrollment {
         const {
@@ -43,9 +26,7 @@ export class EnrollStudent {
         } = enrollmentRequest;
 
         const student = new Student(name, cpf, birthDate);
-        const existingEnrollment = this.enrollments.find(
-            (enrollment) => enrollment.student.cpf.value === enrollmentRequest.student.cpf,
-        );
+        const existingEnrollment = this.enrollmentRepository.findByCpf(enrollmentRequest.student.cpf);
         if (existingEnrollment) {
             throw new Error('Enrollment with duplicated student is not allowed');
         }
@@ -53,12 +34,13 @@ export class EnrollStudent {
         if (student.getAge() < existingClass.module.minimumAge) {
             throw new Error('Student below minimum age');
         }
-        if (existingClass.capacity === this.getEnrollmentsOfAClass(clazz)) {
+        const studentsEnrolledInClass = this.enrollmentRepository.findAllByClass(level, module, clazz);
+        if (existingClass.capacity === studentsEnrolledInClass.length) {
             throw new Error('Class is over capacity');
         }
-        const code = new Code(level, module, clazz, this.enrollments.length + 1);
+        const code = new Code(level, module, clazz, this.enrollmentRepository.count() + 1);
         const enrollment = { student, code, class: existingClass };
-        this.enrollments.push(enrollment);
+        this.enrollmentRepository.saveEnrollment(enrollment);
         return enrollment;
     }
 }
