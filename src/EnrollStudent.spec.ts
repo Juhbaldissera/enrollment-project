@@ -1,4 +1,6 @@
+import { ClassesRepository } from './ClassesRepository';
 import { EnrollmentRepository } from './EnrollmentRepository';
+import { ClassesRepositoryMemory } from './ClassesRepositoryMemory';
 import { EnrollmentRepositoryMemory } from './EnrollmentRepositoryMemory';
 import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
 
@@ -16,12 +18,14 @@ describe('Enroll student', () => {
         class: 'J',
     };
     let enrollmentRepository: EnrollmentRepository;
+    let classesRepository: ClassesRepository;
     beforeEach(() => {
         enrollmentRepository = new EnrollmentRepositoryMemory();
+        classesRepository = new ClassesRepositoryMemory();
     });
 
     it('Should not enroll without valid student name', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -34,7 +38,7 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll without valid student cpf', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -47,7 +51,7 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll duplicated student', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         enrollStudent.execute(enrollmentRequestSample);
         expect(() => enrollStudent.execute(enrollmentRequestSample)).toThrow(
             new Error('Enrollment with duplicated student is not allowed'),
@@ -55,13 +59,13 @@ describe('Enroll student', () => {
     });
 
     it('Should generate enrollment code', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const lastEnrollment = enrollStudent.execute(enrollmentRequestSample);
         expect(lastEnrollment.code.value).toEqual('2021EM1J0001');
     });
 
     it('Should throw an error on inexistent class', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -71,7 +75,7 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll student below minimum age', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const OverBirthYear = currentYear - minimumAgeSample + 1;
         expect(() =>
             enrollStudent.execute({
@@ -85,7 +89,7 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll student over class capacity', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository);
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const fakeCPFs = [
             '655.468.214-77',
             '094.418.663-77',

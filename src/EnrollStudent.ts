@@ -1,4 +1,4 @@
-import { Classes } from './Classes';
+import { ClassesRepository } from './ClassesRepository';
 import { Code } from './Code';
 import { Enrollment, EnrollmentRepository } from './EnrollmentRepository';
 import Student from './Student';
@@ -15,7 +15,7 @@ export interface EnrollmentRequest {
 }
 
 export class EnrollStudent {
-    constructor(private enrollmentRepository: EnrollmentRepository, private classes: Classes = new Classes()) {}
+    constructor(private enrollmentRepository: EnrollmentRepository, private classes: ClassesRepository) {}
 
     public execute(enrollmentRequest: EnrollmentRequest): Enrollment {
         const {

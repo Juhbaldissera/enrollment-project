@@ -18,7 +18,7 @@ const moduleEM1 = new Module(levelEM, '1', '1o Ano', 15, 17000);
 const moduleEM2 = new Module(levelEM, '2', '2o Ano', 16, 17000);
 const moduleEM3 = new Module(levelEM, '3', '3o Ano', 17, 17000);
 
-export class Classes {
+export class ClassesRepositoryMemory {
     classes: Class[] = [
         new Class(module1, 'A', 10),
         new Class(module2, 'B', 10),
