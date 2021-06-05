@@ -9,7 +9,7 @@ export class ClassesRepositoryMemory {
         const levelEM = new Level('EM', 'Ensino Médio');
         const levelEF1 = new Level('EF1', 'Ensino Fundamental I');
         const levelEF2 = new Level('EF2', 'Ensino Fundamental II');
-        const module1 = new Module(levelEF1, '1', '1o Ano', 6, 15000);
+        const module1 = new Module(levelEF1, '1', '1o Ano', 6, 17000);
         const module2 = new Module(levelEF1, '2', '2o Ano', 7, 15000);
         const module3 = new Module(levelEF1, '3', '3o Ano', 8, 15000);
         const module4 = new Module(levelEF1, '4', '4o Ano', 9, 15000);

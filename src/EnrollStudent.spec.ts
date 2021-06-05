@@ -16,6 +16,7 @@ describe('Enroll student', () => {
         level: 'EM',
         module: '1',
         class: 'J',
+        installments: 12,
     };
     let enrollmentRepository: EnrollmentRepository;
     let classesRepository: ClassesRepository;
@@ -136,5 +137,22 @@ describe('Enroll student', () => {
                 class: 'C',
             }),
         ).toThrow(new Error('Class is already started'));
+    });
+
+    it('Should generate the invoices based on the number of installments, rounding each amount and applying the rest in the last invoice', () => {
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
+        const lastEnrollment = enrollStudent.execute(enrollmentRequestSample);
+        expect(lastEnrollment.installments[0]).toEqual(1416.67);
+        expect(lastEnrollment.installments[1]).toEqual(1416.67);
+        expect(lastEnrollment.installments[2]).toEqual(1416.67);
+        expect(lastEnrollment.installments[3]).toEqual(1416.67);
+        expect(lastEnrollment.installments[4]).toEqual(1416.67);
+        expect(lastEnrollment.installments[5]).toEqual(1416.67);
+        expect(lastEnrollment.installments[6]).toEqual(1416.67);
+        expect(lastEnrollment.installments[7]).toEqual(1416.67);
+        expect(lastEnrollment.installments[8]).toEqual(1416.67);
+        expect(lastEnrollment.installments[9]).toEqual(1416.67);
+        expect(lastEnrollment.installments[10]).toEqual(1416.67);
+        expect(lastEnrollment.installments[11]).toEqual(1416.63);
     });
 });

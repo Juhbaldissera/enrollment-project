@@ -13,6 +13,11 @@ export interface EnrollmentRequest {
     level: string;
     module: string;
     class: string;
+    installments: number;
+}
+
+function round(num: number): number {
+    return Math.round(num * 100 + Number.EPSILON) / 100;
 }
 
 export class EnrollStudent {
@@ -24,6 +29,7 @@ export class EnrollStudent {
             level,
             module,
             class: clazz,
+            installments: installmentsNumber,
         } = enrollmentRequest;
 
         const student = new Student(name, cpf, birthDate);
@@ -52,7 +58,12 @@ export class EnrollStudent {
             }
         }
         const code = new Code(level, module, clazz, this.enrollmentRepository.count() + 1);
-        const enrollment = new Enrollment(student, code, existingClass);
+        const installmentValue = round(existingClass.module.price / installmentsNumber);
+        const installments = new Array(installmentsNumber).fill(installmentValue);
+        installments[installments.length - 1] += round(
+            existingClass.module.price - installmentValue * installmentsNumber,
+        );
+        const enrollment = new Enrollment(student, code, existingClass, installments);
         this.enrollmentRepository.saveEnrollment(enrollment);
         return enrollment;
     }
