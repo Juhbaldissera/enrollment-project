@@ -23,4 +23,8 @@ export class Class {
             endDate: new Date(period.endDate),
         };
     }
+
+    getClassDurationTime(): number {
+        return this.period.startDate.getTime() - this.period.endDate.getTime();
+    }
 }

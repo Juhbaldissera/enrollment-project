@@ -125,4 +125,16 @@ describe('Enroll student', () => {
             }),
         ).toThrow(new Error('Class is already finished'));
     });
+
+    it('Should not enroll after 25% of the start of the class', () => {
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
+        expect(() =>
+            enrollStudent.execute({
+                ...enrollmentRequestSample,
+                level: 'EF1',
+                module: '3',
+                class: 'C',
+            }),
+        ).toThrow(new Error('Class is already started'));
+    });
 });

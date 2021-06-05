@@ -42,6 +42,15 @@ export class EnrollStudent {
         if (existingClass.period.endDate.getTime() < Date.now()) {
             throw new Error('Class is already finished');
         }
+        const classAlreadyStarted = existingClass.period.startDate.getTime() < Date.now();
+
+        if (classAlreadyStarted) {
+            const timeHasPassed = existingClass.period.startDate.getTime() - Date.now();
+            const percentageHasPassed = (timeHasPassed * 100) / existingClass.getClassDurationTime();
+            if (percentageHasPassed > 25) {
+                throw new Error('Class is already started');
+            }
+        }
         const code = new Code(level, module, clazz, this.enrollmentRepository.count() + 1);
         const enrollment = new Enrollment(student, code, existingClass);
         this.enrollmentRepository.saveEnrollment(enrollment);
