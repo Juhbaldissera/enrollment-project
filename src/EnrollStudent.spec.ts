@@ -113,4 +113,16 @@ describe('Enroll student', () => {
         );
         expect(() => enrollStudent.execute(enrollmentRequestSample)).toThrow(new Error('Class is over capacity'));
     });
+
+    it('Should not enroll after que end of the class', () => {
+        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
+        expect(() =>
+            enrollStudent.execute({
+                ...enrollmentRequestSample,
+                level: 'EF1',
+                module: '2',
+                class: 'B',
+            }),
+        ).toThrow(new Error('Class is already finished'));
+    });
 });

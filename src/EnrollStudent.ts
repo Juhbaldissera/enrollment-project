@@ -39,6 +39,9 @@ export class EnrollStudent {
         if (existingClass.capacity === studentsEnrolledInClass.length) {
             throw new Error('Class is over capacity');
         }
+        if (existingClass.period.endDate.getTime() < Date.now()) {
+            throw new Error('Class is already finished');
+        }
         const code = new Code(level, module, clazz, this.enrollmentRepository.count() + 1);
         const enrollment = new Enrollment(student, code, existingClass);
         this.enrollmentRepository.saveEnrollment(enrollment);

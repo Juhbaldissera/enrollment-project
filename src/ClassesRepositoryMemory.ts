@@ -21,19 +21,29 @@ export class ClassesRepositoryMemory {
         const moduleEM1 = new Module(levelEM, '1', '1o Ano', 15, 17000);
         const moduleEM2 = new Module(levelEM, '2', '2o Ano', 16, 17000);
         const moduleEM3 = new Module(levelEM, '3', '3o Ano', 17, 17000);
+        const defaultPeriod = {
+            startDate: '2021-06-01',
+            endDate: '2021-12-15',
+        };
         this.classes = [
-            new Class(module1, 'A', 10),
-            new Class(module2, 'B', 10),
-            new Class(module3, 'C', 10),
-            new Class(module4, 'D', 10),
-            new Class(module5, 'E', 10),
-            new Class(module6, 'F', 10),
-            new Class(module7, 'G', 10),
-            new Class(module8, 'H', 10),
-            new Class(module9, 'I', 10),
-            new Class(moduleEM1, 'J', 10),
-            new Class(moduleEM2, 'K', 10),
-            new Class(moduleEM3, 'L', 10),
+            new Class(module1, 'A', 10, defaultPeriod),
+            new Class(module2, 'B', 10, {
+                startDate: '2021-05-01',
+                endDate: '2021-05-30',
+            }),
+            new Class(module3, 'C', 10, {
+                startDate: '2021-05-01',
+                endDate: '2021-06-30',
+            }),
+            new Class(module4, 'D', 10, defaultPeriod),
+            new Class(module5, 'E', 10, defaultPeriod),
+            new Class(module6, 'F', 10, defaultPeriod),
+            new Class(module7, 'G', 10, defaultPeriod),
+            new Class(module8, 'H', 10, defaultPeriod),
+            new Class(module9, 'I', 10, defaultPeriod),
+            new Class(moduleEM1, 'J', 10, defaultPeriod),
+            new Class(moduleEM2, 'K', 10, defaultPeriod),
+            new Class(moduleEM3, 'L', 10, defaultPeriod),
         ];
     }
 
