@@ -12,6 +12,12 @@ export class Enrollment {
         if (student.getAge() < clazz.module.minimumAge) {
             throw new Error('Student below minimum age');
         }
+        if (clazz.isAlreadyFinished(issueDate)) {
+            throw new Error('Class is already finished');
+        }
+        if (clazz.getProgressPercentage(issueDate) > 25) {
+            throw new Error('Class is already started');
+        }
         this.student = student;
         this.code = new Code(issueDate, clazz.module.level.code, clazz.module.code, clazz.code, sequence);
         this.class = clazz;

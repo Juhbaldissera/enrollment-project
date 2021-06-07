@@ -1,30 +1,30 @@
 import { Module } from './Module';
-
-interface Period {
-    startDate: string;
-    endDate: string;
-}
+import { Period } from './Period';
 
 export class Class {
     module: Module;
     code: string;
     capacity: number;
-    period: {
-        startDate: Date;
-        endDate: Date;
-    };
+    period: Period;
 
-    constructor(module: Module, code: string, capacity: number, period: Period) {
+    constructor(module: Module, code: string, capacity: number, period: { startDate: string; endDate: string }) {
         this.module = module;
         this.code = code;
         this.capacity = capacity;
-        this.period = {
-            startDate: new Date(period.startDate),
-            endDate: new Date(period.endDate),
-        };
+        this.period = new Period(period);
     }
 
-    getClassDurationTime(): number {
-        return this.period.startDate.getTime() - this.period.endDate.getTime();
+    isAlreadyFinished(currentDate: Date): boolean {
+        return this.period.endDate.getTime() < currentDate.getTime();
+    }
+
+    getProgressPercentage(currentDate: Date): number {
+        const classAlreadyStarted = this.period.startDate.getTime() < currentDate.getTime();
+
+        if (classAlreadyStarted) {
+            const timeHasPassed = this.period.startDate.getTime() - currentDate.getTime();
+            return (timeHasPassed * 100) / this.period.getClassDurationTime();
+        }
+        return 0;
     }
 }
