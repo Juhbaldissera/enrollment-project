@@ -16,7 +16,7 @@ export interface EnrollmentRequest {
 }
 
 function round(num: number): number {
-    return Math.round(num * 100 + Number.EPSILON) / 100;
+    return Math.trunc(num * 100) / 100;
 }
 
 export class EnrollStudent {
