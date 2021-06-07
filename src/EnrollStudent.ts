@@ -59,7 +59,8 @@ export class EnrollStudent {
             existingClass.module.price - installmentValue * installmentsNumber,
         );
         const sequence = this.enrollmentRepository.count() + 1;
-        const enrollment = new Enrollment(student, sequence, existingClass, installments);
+        const issueDate = new Date();
+        const enrollment = new Enrollment(issueDate, student, sequence, existingClass, installments);
         this.enrollmentRepository.saveEnrollment(enrollment);
         return enrollment;
     }

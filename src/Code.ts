@@ -1,9 +1,9 @@
 export class Code {
     value: string;
 
-    constructor(levelCode: string, moduleCode: string, classCode: string, sequence: number) {
+    constructor(issueDate: Date, levelCode: string, moduleCode: string, classCode: string, sequence: number) {
         const formattedSequence = this.formatSequenceNumber(sequence);
-        this.value = `${new Date().getFullYear()}${levelCode}${moduleCode}${classCode}${formattedSequence}`;
+        this.value = `${issueDate.getFullYear()}${levelCode}${moduleCode}${classCode}${formattedSequence}`;
     }
 
     private formatSequenceNumber(sequence: number): string {
