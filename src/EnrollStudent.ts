@@ -1,5 +1,4 @@
 import { ClassesRepository } from './ClassesRepository';
-import { Code } from './Code';
 import { Enrollment } from './Enrollment';
 import { EnrollmentRepository } from './EnrollmentRepository';
 import Student from './Student';
@@ -38,9 +37,6 @@ export class EnrollStudent {
             throw new Error('Enrollment with duplicated student is not allowed');
         }
         const existingClass = this.classes.find(level, module, clazz);
-        if (student.getAge() < existingClass.module.minimumAge) {
-            throw new Error('Student below minimum age');
-        }
         const studentsEnrolledInClass = this.enrollmentRepository.findAllByClass(level, module, clazz);
         if (existingClass.capacity === studentsEnrolledInClass.length) {
             throw new Error('Class is over capacity');
@@ -57,13 +53,13 @@ export class EnrollStudent {
                 throw new Error('Class is already started');
             }
         }
-        const code = new Code(level, module, clazz, this.enrollmentRepository.count() + 1);
         const installmentValue = round(existingClass.module.price / installmentsNumber);
         const installments = new Array(installmentsNumber).fill(installmentValue);
         installments[installments.length - 1] += round(
             existingClass.module.price - installmentValue * installmentsNumber,
         );
-        const enrollment = new Enrollment(student, code, existingClass, installments);
+        const sequence = this.enrollmentRepository.count() + 1;
+        const enrollment = new Enrollment(student, sequence, existingClass, installments);
         this.enrollmentRepository.saveEnrollment(enrollment);
         return enrollment;
     }
