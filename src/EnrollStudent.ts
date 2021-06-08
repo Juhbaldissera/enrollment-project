@@ -15,10 +15,6 @@ export interface EnrollmentRequest {
     installments: number;
 }
 
-function round(num: number): number {
-    return Math.trunc(num * 100) / 100;
-}
-
 export class EnrollStudent {
     constructor(private enrollmentRepository: EnrollmentRepository, private classes: ClassesRepository) {}
 
@@ -28,7 +24,7 @@ export class EnrollStudent {
             level,
             module,
             class: clazz,
-            installments: installmentsNumber,
+            installments,
         } = enrollmentRequest;
 
         const student = new Student(name, cpf, birthDate);
@@ -41,11 +37,6 @@ export class EnrollStudent {
         if (existingClass.capacity === studentsEnrolledInClass.length) {
             throw new Error('Class is over capacity');
         }
-        const installmentValue = round(existingClass.module.price / installmentsNumber);
-        const installments = new Array(installmentsNumber).fill(installmentValue);
-        installments[installments.length - 1] += round(
-            existingClass.module.price - installmentValue * installmentsNumber,
-        );
         const sequence = this.enrollmentRepository.count() + 1;
         const issueDate = new Date();
         const enrollment = new Enrollment(issueDate, student, sequence, existingClass, installments);
