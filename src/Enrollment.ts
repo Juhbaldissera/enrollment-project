@@ -13,6 +13,7 @@ export class Enrollment {
     class: Class;
     installments: number;
     invoices: Invoice[];
+    invoiceBalance: number;
 
     constructor(issueDate: Date, student: Student, sequence: number, clazz: Class, installments: number) {
         if (student.getAge() < clazz.module.minimumAge) {
@@ -30,6 +31,7 @@ export class Enrollment {
         this.installments = installments;
         this.invoices = [];
         this.generateInvoices();
+        this.invoiceBalance = -this.class.module.price;
     }
 
     generateInvoices(): void {

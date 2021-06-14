@@ -23,6 +23,9 @@ export class EnrollmentRepositoryMemory implements EnrollmentRepository {
     public findByCpf(cpf: string): Enrollment | undefined {
         return this.enrollments.find((enrollment) => enrollment.student.cpf.value === cpf);
     }
+    public findByCode(code: string): Enrollment | undefined {
+        return this.enrollments.find((enrollment) => enrollment.code.value === code);
+    }
     public count(): number {
         return this.enrollments.length;
     }
