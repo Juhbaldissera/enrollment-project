@@ -1,6 +1,6 @@
 import { Class } from './Class';
 import { Code } from './Code';
-import { Invoice } from './Invoice';
+import { Invoice, InvoiceStatus } from './Invoice';
 import Student from './Student';
 
 function round(num: number): number {
@@ -8,6 +8,7 @@ function round(num: number): number {
 }
 
 export class Enrollment {
+    issueDate: Date;
     code: Code;
     student: Student;
     class: Class;
@@ -25,6 +26,7 @@ export class Enrollment {
         if (clazz.getProgressPercentage(issueDate) > 25) {
             throw new Error('Class is already started');
         }
+        this.issueDate = issueDate;
         this.student = student;
         this.code = new Code(issueDate, clazz.module.level.code, clazz.module.code, clazz.code, sequence);
         this.class = clazz;
@@ -37,7 +39,7 @@ export class Enrollment {
     generateInvoices(): void {
         const installmentValue = round(this.class.module.price / this.installments);
         for (let i = 1; i <= this.installments; i++) {
-            this.invoices.push(new Invoice(this.code.value, 1, 1, installmentValue));
+            this.invoices.push(new Invoice(this.code.value, i, this.issueDate.getFullYear(), installmentValue));
         }
         const total = this.invoices.reduce((total, invoice) => {
             total = total + invoice.amount;
@@ -45,5 +47,19 @@ export class Enrollment {
         }, 0);
         const rest = round(this.class.module.price - total);
         this.invoices[this.invoices.length - 1].amount = installmentValue + rest;
+    }
+
+    payInvoice(code: string, month: number, year: number, amount: number): void {
+        const invoice = this.invoices.find(
+            (invoice) =>
+                invoice.code === code &&
+                invoice.month === month &&
+                invoice.year === year &&
+                invoice.amount === amount &&
+                invoice.status === InvoiceStatus.pending,
+        );
+        if (!invoice) throw new Error('Invalid invoice');
+        invoice.status = InvoiceStatus.paid;
+        this.invoiceBalance += amount;
     }
 }
