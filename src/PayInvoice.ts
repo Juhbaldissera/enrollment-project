@@ -1,12 +1,6 @@
 import { EnrollmentRepository } from './EnrollmentRepository';
+import { PayInvoiceInputData } from './PayInvoiceInputData';
 import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
-
-export interface PayInvoiceRequest {
-    code: string;
-    month: number;
-    year: number;
-    amount: number;
-}
 
 export class PayInvoice {
     private enrollmentRepository: EnrollmentRepository;
@@ -15,7 +9,7 @@ export class PayInvoice {
         this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
     }
 
-    public execute(request: PayInvoiceRequest): void {
+    public execute(request: PayInvoiceInputData): void {
         const enrollment = this.enrollmentRepository.findByCode(request.code);
         if (!enrollment) throw new Error('Inexistent enrollment');
         const { month, year, amount } = request;

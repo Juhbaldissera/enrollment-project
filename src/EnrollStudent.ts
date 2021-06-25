@@ -1,20 +1,10 @@
 import { ClassesRepository } from './ClassesRepository';
 import { Enrollment } from './Enrollment';
 import { EnrollmentRepository } from './EnrollmentRepository';
+import { EnrollStudentInputData } from './EnrollStudentInputData';
+import { EnrollStudentOutputData } from './EnrollStudentOutputData';
 import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
 import Student from './Student';
-
-export interface EnrollmentRequest {
-    student: {
-        name: string;
-        cpf: string;
-        birthDate: string;
-    };
-    level: string;
-    module: string;
-    class: string;
-    installments: number;
-}
 
 export class EnrollStudent {
     private classesRepository: ClassesRepository;
@@ -25,22 +15,17 @@ export class EnrollStudent {
         this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
     }
 
-    public execute(enrollmentRequest: EnrollmentRequest): Enrollment {
-        const {
-            student: { name, cpf, birthDate },
-            level,
-            module,
-            class: clazz,
-            installments,
-        } = enrollmentRequest;
+    public execute(enrollStudentInputData: EnrollStudentInputData): EnrollStudentOutputData {
+        const { studentName, studentBirthDate, studentCpf, level, module, classroom, installments } =
+            enrollStudentInputData;
 
-        const student = new Student(name, cpf, birthDate);
-        const existingEnrollment = this.enrollmentRepository.findByCpf(enrollmentRequest.student.cpf);
+        const student = new Student(studentName, studentCpf, studentBirthDate);
+        const existingEnrollment = this.enrollmentRepository.findByCpf(studentCpf);
         if (existingEnrollment) {
             throw new Error('Enrollment with duplicated student is not allowed');
         }
-        const existingClass = this.classesRepository.find(level, module, clazz);
-        const studentsEnrolledInClass = this.enrollmentRepository.findAllByClass(level, module, clazz);
+        const existingClass = this.classesRepository.find(level, module, classroom);
+        const studentsEnrolledInClass = this.enrollmentRepository.findAllByClass(level, module, classroom);
         if (existingClass.capacity === studentsEnrolledInClass.length) {
             throw new Error('Class is over capacity');
         }
@@ -48,6 +33,10 @@ export class EnrollStudent {
         const issueDate = new Date();
         const enrollment = new Enrollment(issueDate, student, sequence, existingClass, installments);
         this.enrollmentRepository.saveEnrollment(enrollment);
-        return enrollment;
+        const enrollStudentOutputData = new EnrollStudentOutputData(enrollment.code.value);
+        for (const invoice of enrollment.invoices) {
+            enrollStudentOutputData.invoices.push(invoice.clone());
+        }
+        return enrollStudentOutputData;
     }
 }

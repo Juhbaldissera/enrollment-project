@@ -1,19 +1,18 @@
 import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
-import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
+import { EnrollStudent } from './EnrollStudent';
+import { EnrollStudentInputData } from './EnrollStudentInputData';
 
 describe('Enroll student', () => {
     let enrollStudent: EnrollStudent;
     const currentYear = new Date().getFullYear();
     const minimumAgeSample = 15;
-    const enrollmentRequestSample: EnrollmentRequest = {
-        student: {
-            name: 'Ana Silva',
-            cpf: '832.081.519-34',
-            birthDate: `${currentYear - minimumAgeSample}-01-01`,
-        },
+    const enrollmentRequestSample: EnrollStudentInputData = {
+        studentName: 'Ana Silva',
+        studentCpf: '832.081.519-34',
+        studentBirthDate: `${currentYear - minimumAgeSample}-01-01`,
         level: 'EM',
         module: '1',
-        class: 'J',
+        classroom: 'J',
         installments: 12,
     };
     beforeEach(() => {
@@ -24,10 +23,7 @@ describe('Enroll student', () => {
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
-                student: {
-                    ...enrollmentRequestSample.student,
-                    name: 'Ana',
-                },
+                studentName: 'Ana',
             }),
         ).toThrow(new Error('Invalid name'));
     });
@@ -36,10 +32,7 @@ describe('Enroll student', () => {
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
-                student: {
-                    ...enrollmentRequestSample.student,
-                    cpf: '123.456.789-99',
-                },
+                studentCpf: '123.456.789-99',
             }),
         ).toThrow(new Error('Invalid cpf'));
     });
@@ -53,14 +46,14 @@ describe('Enroll student', () => {
 
     it('Should generate enrollment code', () => {
         const lastEnrollment = enrollStudent.execute(enrollmentRequestSample);
-        expect(lastEnrollment.code.value).toEqual('2021EM1J0001');
+        expect(lastEnrollment.code).toEqual('2021EM1J0001');
     });
 
     it('Should throw an error on inexistent class', () => {
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
-                class: 'X',
+                classroom: 'X',
             }),
         ).toThrow(new Error('Inexistent class'));
     });
@@ -70,10 +63,7 @@ describe('Enroll student', () => {
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
-                student: {
-                    ...enrollmentRequestSample.student,
-                    birthDate: `${OverBirthYear}-01-01`,
-                },
+                studentBirthDate: `${OverBirthYear}-01-01`,
             }),
         ).toThrow(new Error('Student below minimum age'));
     });
@@ -94,10 +84,7 @@ describe('Enroll student', () => {
         fakeCPFs.forEach((fakeCPF) =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
-                student: {
-                    ...enrollmentRequestSample.student,
-                    cpf: fakeCPF,
-                },
+                studentCpf: fakeCPF,
             }),
         );
         expect(() => enrollStudent.execute(enrollmentRequestSample)).toThrow(new Error('Class is over capacity'));
@@ -109,7 +96,7 @@ describe('Enroll student', () => {
                 ...enrollmentRequestSample,
                 level: 'EF1',
                 module: '2',
-                class: 'B',
+                classroom: 'B',
             }),
         ).toThrow(new Error('Class is already finished'));
     });
@@ -120,7 +107,7 @@ describe('Enroll student', () => {
                 ...enrollmentRequestSample,
                 level: 'EF1',
                 module: '3',
-                class: 'C',
+                classroom: 'C',
             }),
         ).toThrow(new Error('Class is already started'));
     });

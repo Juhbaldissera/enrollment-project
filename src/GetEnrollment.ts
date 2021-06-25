@@ -1,10 +1,7 @@
-import { Enrollment } from './Enrollment';
 import { EnrollmentRepository } from './EnrollmentRepository';
+import { GetEnrollmentInputData } from './GetEnrollmentInputData';
+import { GetEnrollmentOutputData } from './GetEnrollmentOutputData';
 import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
-
-export interface GetEnrollmentRequest {
-    code: string;
-}
 
 export class GetEnrollment {
     private enrollmentRepository: EnrollmentRepository;
@@ -13,9 +10,12 @@ export class GetEnrollment {
         this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
     }
 
-    public execute(request: GetEnrollmentRequest): Enrollment {
+    public execute(request: GetEnrollmentInputData): GetEnrollmentOutputData {
         const enrollment = this.enrollmentRepository.findByCode(request.code);
         if (!enrollment) throw new Error('Inexistent enrollment');
-        return enrollment;
+        return new GetEnrollmentOutputData({
+            code: enrollment.code.value,
+            balance: enrollment.getInvoiceBalance(),
+        });
     }
 }
