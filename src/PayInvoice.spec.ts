@@ -1,9 +1,11 @@
 import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
+import { GetEnrollment } from './GetEnrollment';
 import { PayInvoice, PayInvoiceRequest } from './PayInvoice';
 import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
 
 describe('Pay invoice', () => {
     let enrollStudent: EnrollStudent;
+    let getEnrollment: GetEnrollment;
     let payInvoice: PayInvoice;
     const currentYear = new Date().getFullYear();
     const minimumAgeSample = 15;
@@ -28,13 +30,16 @@ describe('Pay invoice', () => {
         const repositoryMemoryFactory = new RepositoryMemoryFactory();
         enrollStudent = new EnrollStudent(repositoryMemoryFactory);
         payInvoice = new PayInvoice(repositoryMemoryFactory);
+        getEnrollment = new GetEnrollment(repositoryMemoryFactory);
     });
 
     it('Should pay enrollment invoice', () => {
         enrollStudent.execute(enrollmentRequestSample);
 
-        const enrollment = payInvoice.execute(payInvoiceRequest);
-        expect(enrollment.invoiceBalance).toEqual(-15583.34);
+        payInvoice.execute(payInvoiceRequest);
+        const enrollment = getEnrollment.execute({ code: '2021EM1J0001' });
+        expect(enrollment.code.value).toEqual('2021EM1J0001');
+        expect(enrollment.getInvoiceBalance()).toEqual(15583.33);
     });
 
     it('Should throw an error on inexistent invoice', () => {

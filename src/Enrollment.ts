@@ -1,6 +1,7 @@
 import { Class } from './Class';
 import { Code } from './Code';
-import { Invoice, InvoiceStatus } from './Invoice';
+import { Invoice } from './Invoice';
+import { InvoiceEvent } from './InvoiceEvent';
 import Student from './Student';
 
 function round(num: number): number {
@@ -49,17 +50,21 @@ export class Enrollment {
         this.invoices[this.invoices.length - 1].amount = installmentValue + rest;
     }
 
-    payInvoice(code: string, month: number, year: number, amount: number): void {
-        const invoice = this.invoices.find(
-            (invoice) =>
-                invoice.code === code &&
-                invoice.month === month &&
-                invoice.year === year &&
-                invoice.amount === amount &&
-                invoice.status === InvoiceStatus.pending,
-        );
+    getInvoice(month: number, year: number): Invoice | undefined {
+        const invoice = this.invoices.find((invoice) => invoice.month === month && invoice.year === year);
+        return invoice;
+    }
+
+    getInvoiceBalance(): number {
+        return this.invoices.reduce((total, invoice) => {
+            total += invoice.getBalance();
+            return total;
+        }, 0);
+    }
+
+    payInvoice(month: number, year: number, amount: number): void {
+        const invoice = this.getInvoice(month, year);
         if (!invoice) throw new Error('Invalid invoice');
-        invoice.status = InvoiceStatus.paid;
-        this.invoiceBalance += amount;
+        invoice.addEvent(new InvoiceEvent('payment', amount));
     }
 }
