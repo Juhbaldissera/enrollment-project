@@ -1,11 +1,10 @@
-import { ClassesRepository } from './ClassesRepository';
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { ClassesRepositoryMemory } from './ClassesRepositoryMemory';
-import { EnrollmentRepositoryMemory } from './EnrollmentRepositoryMemory';
 import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
 import { GetEnrollment } from './GetEnrollment';
+import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
 
 describe('Get Enrollment', () => {
+    let enrollStudent: EnrollStudent;
+    let getEnrollment: GetEnrollment;
     const currentYear = new Date().getFullYear();
     const minimumAgeSample = 15;
     const enrollmentRequestSample: EnrollmentRequest = {
@@ -19,25 +18,21 @@ describe('Get Enrollment', () => {
         class: 'J',
         installments: 12,
     };
-    let enrollmentRepository: EnrollmentRepository;
-    let classesRepository: ClassesRepository;
     beforeEach(() => {
-        enrollmentRepository = new EnrollmentRepositoryMemory();
-        classesRepository = new ClassesRepositoryMemory();
+        const repositoryMemoryFactory = new RepositoryMemoryFactory();
+        enrollStudent = new EnrollStudent(repositoryMemoryFactory);
+        getEnrollment = new GetEnrollment(repositoryMemoryFactory);
     });
 
     it('Should get enrollment by code with invoice balance', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         enrollStudent.execute(enrollmentRequestSample);
 
-        const getEnrollment = new GetEnrollment(enrollmentRepository);
         const enrollment = getEnrollment.execute({ code: '2021EM1J0001' });
         expect(enrollment.code.value).toEqual('2021EM1J0001');
         expect(enrollment.invoiceBalance).toEqual(-17000);
     });
 
     it('Should throw an error on inexistent enrollment', () => {
-        const getEnrollment = new GetEnrollment(enrollmentRepository);
         expect(() => getEnrollment.execute({ code: '2021EM1J0001' })).toThrow(new Error('Inexistent enrollment'));
     });
 });

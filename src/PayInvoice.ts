@@ -1,5 +1,6 @@
 import { Enrollment } from './Enrollment';
 import { EnrollmentRepository } from './EnrollmentRepository';
+import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
 
 export interface PayInvoiceRequest {
     code: string;
@@ -9,7 +10,12 @@ export interface PayInvoiceRequest {
 }
 
 export class PayInvoice {
-    constructor(private enrollmentRepository: EnrollmentRepository) {}
+    private enrollmentRepository: EnrollmentRepository;
+
+    constructor(repositoryFactory: RepositoryAbstractFactory) {
+        this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
+    }
+
     public execute(request: PayInvoiceRequest): Enrollment {
         const enrollment = this.enrollmentRepository.findByCode(request.code);
         if (!enrollment) throw new Error('Inexistent enrollment');

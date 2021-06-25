@@ -1,6 +1,7 @@
 import { ClassesRepository } from './ClassesRepository';
 import { Enrollment } from './Enrollment';
 import { EnrollmentRepository } from './EnrollmentRepository';
+import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
 import Student from './Student';
 
 export interface EnrollmentRequest {
@@ -16,7 +17,13 @@ export interface EnrollmentRequest {
 }
 
 export class EnrollStudent {
-    constructor(private enrollmentRepository: EnrollmentRepository, private classes: ClassesRepository) {}
+    private classesRepository: ClassesRepository;
+    private enrollmentRepository: EnrollmentRepository;
+
+    constructor(repositoryFactory: RepositoryAbstractFactory) {
+        this.classesRepository = repositoryFactory.createClassesRepository();
+        this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
+    }
 
     public execute(enrollmentRequest: EnrollmentRequest): Enrollment {
         const {
@@ -32,7 +39,7 @@ export class EnrollStudent {
         if (existingEnrollment) {
             throw new Error('Enrollment with duplicated student is not allowed');
         }
-        const existingClass = this.classes.find(level, module, clazz);
+        const existingClass = this.classesRepository.find(level, module, clazz);
         const studentsEnrolledInClass = this.enrollmentRepository.findAllByClass(level, module, clazz);
         if (existingClass.capacity === studentsEnrolledInClass.length) {
             throw new Error('Class is over capacity');

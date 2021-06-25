@@ -1,10 +1,8 @@
-import { ClassesRepository } from './ClassesRepository';
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { ClassesRepositoryMemory } from './ClassesRepositoryMemory';
-import { EnrollmentRepositoryMemory } from './EnrollmentRepositoryMemory';
+import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
 import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
 
 describe('Enroll student', () => {
+    let enrollStudent: EnrollStudent;
     const currentYear = new Date().getFullYear();
     const minimumAgeSample = 15;
     const enrollmentRequestSample: EnrollmentRequest = {
@@ -18,15 +16,11 @@ describe('Enroll student', () => {
         class: 'J',
         installments: 12,
     };
-    let enrollmentRepository: EnrollmentRepository;
-    let classesRepository: ClassesRepository;
     beforeEach(() => {
-        enrollmentRepository = new EnrollmentRepositoryMemory();
-        classesRepository = new ClassesRepositoryMemory();
+        enrollStudent = new EnrollStudent(new RepositoryMemoryFactory());
     });
 
     it('Should not enroll without valid student name', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -39,7 +33,6 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll without valid student cpf', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -52,7 +45,6 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll duplicated student', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         enrollStudent.execute(enrollmentRequestSample);
         expect(() => enrollStudent.execute(enrollmentRequestSample)).toThrow(
             new Error('Enrollment with duplicated student is not allowed'),
@@ -60,13 +52,11 @@ describe('Enroll student', () => {
     });
 
     it('Should generate enrollment code', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const lastEnrollment = enrollStudent.execute(enrollmentRequestSample);
         expect(lastEnrollment.code.value).toEqual('2021EM1J0001');
     });
 
     it('Should throw an error on inexistent class', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -76,7 +66,6 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll student below minimum age', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const OverBirthYear = currentYear - minimumAgeSample + 1;
         expect(() =>
             enrollStudent.execute({
@@ -90,7 +79,6 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll student over class capacity', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const fakeCPFs = [
             '655.468.214-77',
             '094.418.663-77',
@@ -116,7 +104,6 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll after que end of the class', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -128,7 +115,6 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll after 25% of the start of the class', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,
@@ -140,7 +126,6 @@ describe('Enroll student', () => {
     });
 
     it('Should generate the invoices based on the number of installments, rounding each amount and applying the rest in the last invoice', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         const lastEnrollment = enrollStudent.execute(enrollmentRequestSample);
         expect(lastEnrollment.invoices[0].amount).toEqual(1416.66);
         expect(lastEnrollment.invoices[1].amount).toEqual(1416.66);

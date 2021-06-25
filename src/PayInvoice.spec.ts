@@ -1,11 +1,10 @@
-import { ClassesRepository } from './ClassesRepository';
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { ClassesRepositoryMemory } from './ClassesRepositoryMemory';
-import { EnrollmentRepositoryMemory } from './EnrollmentRepositoryMemory';
 import { EnrollmentRequest, EnrollStudent } from './EnrollStudent';
 import { PayInvoice, PayInvoiceRequest } from './PayInvoice';
+import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
 
 describe('Pay invoice', () => {
+    let enrollStudent: EnrollStudent;
+    let payInvoice: PayInvoice;
     const currentYear = new Date().getFullYear();
     const minimumAgeSample = 15;
     const enrollmentRequestSample: EnrollmentRequest = {
@@ -25,32 +24,26 @@ describe('Pay invoice', () => {
         year: 2021,
         amount: 1416.66,
     };
-    let enrollmentRepository: EnrollmentRepository;
-    let classesRepository: ClassesRepository;
     beforeEach(() => {
-        enrollmentRepository = new EnrollmentRepositoryMemory();
-        classesRepository = new ClassesRepositoryMemory();
+        const repositoryMemoryFactory = new RepositoryMemoryFactory();
+        enrollStudent = new EnrollStudent(repositoryMemoryFactory);
+        payInvoice = new PayInvoice(repositoryMemoryFactory);
     });
 
     it('Should pay enrollment invoice', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         enrollStudent.execute(enrollmentRequestSample);
 
-        const payInvoice = new PayInvoice(enrollmentRepository);
         const enrollment = payInvoice.execute(payInvoiceRequest);
         expect(enrollment.invoiceBalance).toEqual(-15583.34);
     });
 
     it('Should throw an error on inexistent invoice', () => {
-        const enrollStudent = new EnrollStudent(enrollmentRepository, classesRepository);
         enrollStudent.execute(enrollmentRequestSample);
 
-        const payInvoice = new PayInvoice(enrollmentRepository);
         expect(() => payInvoice.execute({ ...payInvoiceRequest, year: 2010 })).toThrow(new Error('Invalid invoice'));
     });
 
     it('Should throw an error on inexistent enrollment', () => {
-        const payInvoice = new PayInvoice(enrollmentRepository);
         expect(() => payInvoice.execute(payInvoiceRequest)).toThrow(new Error('Inexistent enrollment'));
     });
 });
