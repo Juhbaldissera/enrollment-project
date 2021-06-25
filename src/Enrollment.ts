@@ -15,6 +15,7 @@ export class Enrollment {
     class: Class;
     installments: number;
     invoices: Invoice[];
+    status: 'active' | 'cancelled';
 
     constructor(issueDate: Date, student: Student, sequence: number, clazz: Class, installments: number) {
         if (student.getAge() < clazz.module.minimumAge) {
@@ -33,6 +34,7 @@ export class Enrollment {
         this.installments = installments;
         this.invoices = [];
         this.generateInvoices();
+        this.status = 'active';
     }
 
     generateInvoices(): void {
@@ -64,5 +66,9 @@ export class Enrollment {
         const invoice = this.getInvoice(month, year);
         if (!invoice) throw new Error('Invalid invoice');
         invoice.addEvent(new InvoiceEvent('payment', amount));
+    }
+
+    cancel(): void {
+        this.status = 'cancelled';
     }
 }

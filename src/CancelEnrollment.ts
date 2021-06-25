@@ -1,22 +1,17 @@
+import { CancelEnrollmentInputData } from './CancelEnrollmentInputData';
 import { EnrollmentRepository } from './EnrollmentRepository';
-import { GetEnrollmentInputData } from './GetEnrollmentInputData';
-import { GetEnrollmentOutputData } from './GetEnrollmentOutputData';
 import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
 
-export class GetEnrollment {
+export class CancelEnrollment {
     private enrollmentRepository: EnrollmentRepository;
 
     constructor(repositoryFactory: RepositoryAbstractFactory) {
         this.enrollmentRepository = repositoryFactory.createEnrollmentRepository();
     }
 
-    public execute(request: GetEnrollmentInputData): GetEnrollmentOutputData {
+    public execute(request: CancelEnrollmentInputData): void {
         const enrollment = this.enrollmentRepository.findByCode(request.code);
         if (!enrollment) throw new Error('Inexistent enrollment');
-        return new GetEnrollmentOutputData({
-            code: enrollment.code.value,
-            balance: enrollment.getInvoiceBalance(),
-            status: enrollment.status,
-        });
+        enrollment.cancel();
     }
 }
