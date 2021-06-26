@@ -45,4 +45,14 @@ describe('Get Enrollment', () => {
         expect(enrollment.invoices[0].dueDate.toISOString()).toEqual('2021-01-05T03:00:00.000Z');
         expect(enrollment.invoices[0].status).toEqual('overdue');
     });
+
+    it('Should calculate penalty and interests', () => {
+        enrollStudent.execute(enrollmentRequestSample);
+        const enrollment = getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-06-20') });
+        expect(enrollment.code).toEqual('2021EM1J0001');
+        expect(enrollment.invoices[0].penalty).toEqual(141.67);
+        expect(enrollment.invoices[0].interests).toEqual(2337.49);
+        expect(enrollment.invoices[11].penalty).toEqual(0);
+        expect(enrollment.invoices[11].interests).toEqual(0);
+    });
 });

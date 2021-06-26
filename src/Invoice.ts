@@ -34,6 +34,19 @@ export class Invoice {
         return 'open';
     }
 
+    getPenalty(currentDate: Date): number {
+        if (this.getStatus(currentDate) != 'overdue') return 0;
+        const balance = this.getBalance();
+        return Math.round(balance * 0.1 * 100) / 100;
+    }
+
+    getInterests(currentDate: Date): number {
+        if (this.getStatus(currentDate) != 'overdue') return 0;
+        const balance = this.getBalance();
+        const dueDays = Math.floor((currentDate.getTime() - this.dueDate.getTime()) / (1000 * 60 * 60 * 24));
+        return Math.round(balance * 0.01 * dueDays * 100) / 100;
+    }
+
     clone(): Invoice {
         return JSON.parse(JSON.stringify(this));
     }

@@ -23,6 +23,8 @@ export class GetEnrollment {
                 amount: invoice.amount,
                 status: invoice.getStatus(request.currentDate),
                 dueDate: invoice.dueDate,
+                penalty: invoice.getPenalty(request.currentDate),
+                interests: invoice.getInterests(request.currentDate),
             });
         }
         return getEnrollmentOutputData;
