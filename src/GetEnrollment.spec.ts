@@ -44,6 +44,8 @@ describe('Get Enrollment', () => {
         expect(enrollment.code).toEqual('2021EM1J0001');
         expect(enrollment.invoices[0].dueDate.toISOString()).toEqual('2021-01-05T03:00:00.000Z');
         expect(enrollment.invoices[0].status).toEqual('overdue');
+        expect(enrollment.invoices[11].dueDate.toISOString()).toEqual('2021-12-05T03:00:00.000Z');
+        expect(enrollment.invoices[11].status).toEqual('open');
     });
 
     it('Should calculate penalty and interests', () => {
