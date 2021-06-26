@@ -23,7 +23,9 @@ export class Invoice {
 
     getBalance(): number {
         return this.events.reduce((total, event) => {
-            total -= event.amount;
+            if (event.type === 'payment') total -= event.amount;
+            if (event.type === 'penalty') total += event.amount;
+            if (event.type === 'interests') total += event.amount;
             return total;
         }, this.amount);
     }

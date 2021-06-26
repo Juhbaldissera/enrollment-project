@@ -25,6 +25,7 @@ export class GetEnrollment {
                 dueDate: invoice.dueDate,
                 penalty: invoice.getPenalty(request.currentDate),
                 interests: invoice.getInterests(request.currentDate),
+                balance: invoice.getBalance(),
             });
         }
         return getEnrollmentOutputData;

@@ -12,7 +12,7 @@ export class PayInvoice {
     public execute(request: PayInvoiceInputData): void {
         const enrollment = this.enrollmentRepository.findByCode(request.code);
         if (!enrollment) throw new Error('Inexistent enrollment');
-        const { month, year, amount } = request;
-        enrollment.payInvoice(month, year, amount);
+        const { month, year, amount, paymentDate } = request;
+        enrollment.payInvoice(month, year, amount, paymentDate);
     }
 }

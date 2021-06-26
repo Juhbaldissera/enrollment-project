@@ -25,6 +25,7 @@ describe('Pay invoice', () => {
         month: 1,
         year: 2021,
         amount: 1416.66,
+        paymentDate: new Date('2021-01-01'),
     };
     beforeEach(() => {
         const repositoryMemoryFactory = new RepositoryMemoryFactory();
@@ -50,5 +51,17 @@ describe('Pay invoice', () => {
 
     it('Should throw an error on inexistent enrollment', () => {
         expect(() => payInvoice.execute(payInvoiceRequest)).toThrow(new Error('Inexistent enrollment'));
+    });
+
+    it('Should pay overdue invoice', () => {
+        enrollStudent.execute(enrollmentRequestSample);
+        payInvoice.execute({
+            ...payInvoiceRequest,
+            paymentDate: new Date('2021-06-20'),
+            amount: 4129.57,
+        });
+        const enrollmentAfter = getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-06-20') });
+        expect(enrollmentAfter.code).toEqual('2021EM1J0001');
+        expect(enrollmentAfter.invoices[0].balance).toEqual(0);
     });
 });

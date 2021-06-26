@@ -3,11 +3,25 @@ export class PayInvoiceInputData {
     month: number;
     year: number;
     amount: number;
+    paymentDate: Date;
 
-    constructor({ code, month, year, amount }: { code: string; month: number; year: number; amount: number }) {
+    constructor({
+        code,
+        month,
+        year,
+        amount,
+        paymentDate,
+    }: {
+        code: string;
+        month: number;
+        year: number;
+        amount: number;
+        paymentDate: Date;
+    }) {
         this.code = code;
         this.month = month;
         this.year = year;
         this.amount = amount;
+        this.paymentDate = paymentDate;
     }
 }

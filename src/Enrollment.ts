@@ -62,9 +62,13 @@ export class Enrollment {
         }, 0);
     }
 
-    payInvoice(month: number, year: number, amount: number): void {
+    payInvoice(month: number, year: number, amount: number, paymentDate: Date): void {
         const invoice = this.getInvoice(month, year);
         if (!invoice) throw new Error('Invalid invoice');
+        if (invoice.getStatus(paymentDate) === 'overdue') {
+            invoice.addEvent(new InvoiceEvent('penalty', invoice.getPenalty(paymentDate)));
+            invoice.addEvent(new InvoiceEvent('interests', invoice.getInterests(paymentDate)));
+        }
         invoice.addEvent(new InvoiceEvent('payment', amount));
     }
 
