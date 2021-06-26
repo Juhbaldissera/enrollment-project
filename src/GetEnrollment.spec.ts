@@ -26,12 +26,23 @@ describe('Get Enrollment', () => {
     it('Should get enrollment by code with invoice balance', () => {
         enrollStudent.execute(enrollmentRequestSample);
 
-        const enrollment = getEnrollment.execute({ code: '2021EM1J0001' });
+        const enrollment = getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-01-01') });
         expect(enrollment.code).toEqual('2021EM1J0001');
         expect(enrollment.balance).toEqual(16999.99);
     });
 
     it('Should throw an error on inexistent enrollment', () => {
-        expect(() => getEnrollment.execute({ code: '2021EM1J0001' })).toThrow(new Error('Inexistent enrollment'));
+        expect(() => getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-01-01') })).toThrow(
+            new Error('Inexistent enrollment'),
+        );
+    });
+
+    it('Should calculate due date and return status open or overdue for each invoice', () => {
+        enrollStudent.execute(enrollmentRequestSample);
+
+        const enrollment = getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-06-20') });
+        expect(enrollment.code).toEqual('2021EM1J0001');
+        expect(enrollment.invoices[0].dueDate.toISOString()).toEqual('2021-01-05T03:00:00.000Z');
+        expect(enrollment.invoices[0].status).toEqual('overdue');
     });
 });

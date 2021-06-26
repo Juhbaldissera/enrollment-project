@@ -30,12 +30,14 @@ describe('Cancel Enrollment', () => {
         enrollStudent.execute(enrollmentRequestSample);
 
         cancelEnrollment.execute({ code: '2021EM1J0001' });
-        const enrollment = getEnrollment.execute({ code: '2021EM1J0001' });
+        const enrollment = getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-01-01') });
         expect(enrollment.code).toEqual('2021EM1J0001');
         expect(enrollment.status).toEqual('cancelled');
     });
 
     it('Should throw an error on inexistent enrollment', () => {
-        expect(() => getEnrollment.execute({ code: '2021EM1J0001' })).toThrow(new Error('Inexistent enrollment'));
+        expect(() => getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-01-01') })).toThrow(
+            new Error('Inexistent enrollment'),
+        );
     });
 });

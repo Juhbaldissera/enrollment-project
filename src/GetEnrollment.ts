@@ -13,10 +13,18 @@ export class GetEnrollment {
     public execute(request: GetEnrollmentInputData): GetEnrollmentOutputData {
         const enrollment = this.enrollmentRepository.findByCode(request.code);
         if (!enrollment) throw new Error('Inexistent enrollment');
-        return new GetEnrollmentOutputData({
+        const getEnrollmentOutputData = new GetEnrollmentOutputData({
             code: enrollment.code.value,
             balance: enrollment.getInvoiceBalance(),
             status: enrollment.status,
         });
+        for (const invoice of enrollment.invoices) {
+            getEnrollmentOutputData.invoices.push({
+                amount: invoice.amount,
+                status: invoice.getStatus(request.currentDate),
+                dueDate: invoice.dueDate,
+            });
+        }
+        return getEnrollmentOutputData;
     }
 }

@@ -37,7 +37,7 @@ describe('Pay invoice', () => {
         enrollStudent.execute(enrollmentRequestSample);
 
         payInvoice.execute(payInvoiceRequest);
-        const enrollment = getEnrollment.execute({ code: '2021EM1J0001' });
+        const enrollment = getEnrollment.execute({ code: '2021EM1J0001', currentDate: new Date('2021-01-01') });
         expect(enrollment.code).toEqual('2021EM1J0001');
         expect(enrollment.balance).toEqual(15583.33);
     });
