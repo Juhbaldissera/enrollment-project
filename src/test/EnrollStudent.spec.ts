@@ -1,6 +1,6 @@
-import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
-import { EnrollStudent } from './EnrollStudent';
-import { EnrollStudentInputData } from './EnrollStudentInputData';
+import { RepositoryMemoryFactory } from '../adapter/factory/RepositoryMemoryFactory';
+import { EnrollStudent } from '../domain/usecase/EnrollStudent';
+import { EnrollStudentInputData } from '../domain/usecase/input-output-data/EnrollStudentInputData';
 
 describe('Enroll student', () => {
     let enrollStudent: EnrollStudent;

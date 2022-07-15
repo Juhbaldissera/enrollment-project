@@ -1,10 +1,10 @@
-import { ClassesRepository } from './ClassesRepository';
-import { Enrollment } from './Enrollment';
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { EnrollStudentInputData } from './EnrollStudentInputData';
-import { EnrollStudentOutputData } from './EnrollStudentOutputData';
-import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
-import Student from './Student';
+import { ClassesRepository } from '../repository/ClassesRepository';
+import { Enrollment } from '../entity/Enrollment';
+import { EnrollmentRepository } from '../repository/EnrollmentRepository';
+import { EnrollStudentInputData } from './input-output-data/EnrollStudentInputData';
+import { EnrollStudentOutputData } from './input-output-data/EnrollStudentOutputData';
+import { RepositoryAbstractFactory } from '../factory/RepositoryAbstractFactory';
+import Student from '../entity/Student';
 
 export class EnrollStudent {
     private classesRepository: ClassesRepository;

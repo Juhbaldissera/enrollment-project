@@ -1,5 +1,5 @@
-import { ClassesRepository } from './ClassesRepository';
-import { EnrollmentRepository } from './EnrollmentRepository';
+import { ClassesRepository } from '../repository/ClassesRepository';
+import { EnrollmentRepository } from '../repository/EnrollmentRepository';
 
 export interface RepositoryAbstractFactory {
     createClassesRepository(): ClassesRepository;

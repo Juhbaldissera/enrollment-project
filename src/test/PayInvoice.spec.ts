@@ -1,9 +1,9 @@
-import { EnrollStudent } from './EnrollStudent';
-import { EnrollStudentInputData } from './EnrollStudentInputData';
-import { GetEnrollment } from './GetEnrollment';
-import { PayInvoice } from './PayInvoice';
-import { PayInvoiceInputData } from './PayInvoiceInputData';
-import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
+import { EnrollStudent } from '../domain/usecase/EnrollStudent';
+import { EnrollStudentInputData } from '../domain/usecase/input-output-data/EnrollStudentInputData';
+import { GetEnrollment } from '../domain/usecase/GetEnrollment';
+import { PayInvoice } from '../domain/usecase/PayInvoice';
+import { PayInvoiceInputData } from '../domain/usecase/input-output-data/PayInvoiceInputData';
+import { RepositoryMemoryFactory } from '../adapter/factory/RepositoryMemoryFactory';
 
 describe('Pay invoice', () => {
     let enrollStudent: EnrollStudent;

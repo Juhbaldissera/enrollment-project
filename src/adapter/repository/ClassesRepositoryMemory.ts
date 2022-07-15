@@ -1,6 +1,6 @@
-import { Class } from './Class';
-import { Level } from './Level';
-import { Module } from './Module';
+import { Class } from '../../domain/entity/Class';
+import { Level } from '../../domain/entity/Level';
+import { Module } from '../../domain/entity/Module';
 
 export class ClassesRepositoryMemory {
     classes: Class[];

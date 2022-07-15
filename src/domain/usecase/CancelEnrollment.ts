@@ -1,6 +1,6 @@
-import { CancelEnrollmentInputData } from './CancelEnrollmentInputData';
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
+import { CancelEnrollmentInputData } from './input-output-data/CancelEnrollmentInputData';
+import { EnrollmentRepository } from '../repository/EnrollmentRepository';
+import { RepositoryAbstractFactory } from '../factory/RepositoryAbstractFactory';
 
 export class CancelEnrollment {
     private enrollmentRepository: EnrollmentRepository;

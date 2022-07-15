@@ -1,7 +1,7 @@
-import { EnrollStudent } from './EnrollStudent';
-import { EnrollStudentInputData } from './EnrollStudentInputData';
-import { GetEnrollment } from './GetEnrollment';
-import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
+import { EnrollStudent } from '../domain/usecase/EnrollStudent';
+import { EnrollStudentInputData } from '../domain/usecase/input-output-data/EnrollStudentInputData';
+import { GetEnrollment } from '../domain/usecase/GetEnrollment';
+import { RepositoryMemoryFactory } from '../adapter/factory/RepositoryMemoryFactory';
 
 describe('Get Enrollment', () => {
     let enrollStudent: EnrollStudent;

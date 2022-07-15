@@ -1,8 +1,8 @@
-import { EnrollStudent } from './EnrollStudent';
-import { EnrollStudentInputData } from './EnrollStudentInputData';
-import { GetEnrollment } from './GetEnrollment';
-import { RepositoryMemoryFactory } from './RepositoryMemoryFactory';
-import { CancelEnrollment } from './CancelEnrollment';
+import { EnrollStudent } from '../domain/usecase/EnrollStudent';
+import { EnrollStudentInputData } from '../domain/usecase/input-output-data/EnrollStudentInputData';
+import { GetEnrollment } from '../domain/usecase/GetEnrollment';
+import { RepositoryMemoryFactory } from '../adapter/factory/RepositoryMemoryFactory';
+import { CancelEnrollment } from '../domain/usecase/CancelEnrollment';
 
 describe('Cancel Enrollment', () => {
     let enrollStudent: EnrollStudent;

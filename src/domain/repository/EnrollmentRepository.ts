@@ -1,4 +1,4 @@
-import { Enrollment } from './Enrollment';
+import { Enrollment } from '../entity/Enrollment';
 
 export interface EnrollmentRepository {
     saveEnrollment(enrollment: Enrollment): void;

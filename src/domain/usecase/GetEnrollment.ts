@@ -1,7 +1,7 @@
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { GetEnrollmentInputData } from './GetEnrollmentInputData';
-import { GetEnrollmentOutputData } from './GetEnrollmentOutputData';
-import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
+import { EnrollmentRepository } from '../repository/EnrollmentRepository';
+import { GetEnrollmentInputData } from './input-output-data/GetEnrollmentInputData';
+import { GetEnrollmentOutputData } from './input-output-data/GetEnrollmentOutputData';
+import { RepositoryAbstractFactory } from '../factory/RepositoryAbstractFactory';
 
 export class GetEnrollment {
     private enrollmentRepository: EnrollmentRepository;

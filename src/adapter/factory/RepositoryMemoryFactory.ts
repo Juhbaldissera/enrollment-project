@@ -1,7 +1,7 @@
-import { ClassesRepositoryMemory } from './ClassesRepositoryMemory';
-import { EnrollmentRepository } from './EnrollmentRepository';
-import { EnrollmentRepositoryMemorySingleton } from './EnrollmentRepositoryMemorySingleton';
-import { RepositoryAbstractFactory } from './RepositoryAbstractFactory';
+import { ClassesRepositoryMemory } from '../repository/ClassesRepositoryMemory';
+import { EnrollmentRepository } from '../../domain/repository/EnrollmentRepository';
+import { EnrollmentRepositoryMemorySingleton } from '../repository/EnrollmentRepositoryMemorySingleton';
+import { RepositoryAbstractFactory } from '../../domain/factory/RepositoryAbstractFactory';
 
 export class RepositoryMemoryFactory implements RepositoryAbstractFactory {
     constructor() {

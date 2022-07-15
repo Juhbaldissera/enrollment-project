@@ -1,5 +1,5 @@
-import { Invoice } from './Invoice';
-import { InvoiceEvent } from './InvoiceEvent';
+import { Invoice } from '../domain/entity/Invoice';
+import { InvoiceEvent } from '../domain/entity/InvoiceEvent';
 
 describe('Invoice', () => {
     it('should get correct balance', () => {
