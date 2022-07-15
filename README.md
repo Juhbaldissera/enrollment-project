@@ -1,13 +1,18 @@
 # enrollment-project
 Project developed on Brana's course: https://app.branas.io/public/products/cd4aea57-4b43-41e9-bda5-f487c3817b29. 
 
-## Requirements
-- Node 12
-
 ## Installing
+
+- Install node version manager
 ```bash
-$ git clone git@github.com:Juhbaldissera/enrollment-project.git
-$ cd enrollment-project
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.0/install.sh
+```
+- Use the node version defined in **.nvmrc**
+```bash
+$ nvm use
+```
+- Install all the dependencies
+```bash
 $ npm i
 ```
 
