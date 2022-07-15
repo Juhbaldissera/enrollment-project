@@ -12,11 +12,10 @@ export default class Student {
         this.birthDate = new Date(birthDate);
     }
 
-    getAge(): number {
-        const today = new Date();
-        let age = today.getFullYear() - this.birthDate.getFullYear();
-        const month = today.getMonth() - this.birthDate.getMonth();
-        if (month < 0 || (month === 0 && today.getDate() < this.birthDate.getDate())) {
+    getAge(currentDate: Date): number {
+        let age = currentDate.getFullYear() - this.birthDate.getFullYear();
+        const month = currentDate.getMonth() - this.birthDate.getMonth();
+        if (month < 0 || (month === 0 && currentDate.getDate() < this.birthDate.getDate())) {
             age--;
         }
         return age;

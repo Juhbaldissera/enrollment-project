@@ -9,16 +9,18 @@ describe('Pay invoice', () => {
     let enrollStudent: EnrollStudent;
     let getEnrollment: GetEnrollment;
     let payInvoice: PayInvoice;
-    const currentYear = new Date().getFullYear();
+    const issueDate = new Date('2021-06-26');
+    const issueYear = issueDate.getFullYear();
     const minimumAgeSample = 15;
     const enrollmentRequestSample: EnrollStudentInputData = {
         studentName: 'Ana Silva',
         studentCpf: '832.081.519-34',
-        studentBirthDate: `${currentYear - minimumAgeSample}-01-01`,
+        studentBirthDate: `${issueYear - minimumAgeSample}-01-01`,
         level: 'EM',
         module: '1',
         classroom: 'J',
         installments: 12,
+        currentDate: issueDate,
     };
     const payInvoiceRequest: PayInvoiceInputData = {
         code: '2021EM1J0001',

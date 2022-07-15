@@ -4,16 +4,18 @@ import { EnrollStudentInputData } from './EnrollStudentInputData';
 
 describe('Enroll student', () => {
     let enrollStudent: EnrollStudent;
-    const currentYear = new Date().getFullYear();
+    const issueDate = new Date('2021-06-26');
+    const issueYear = issueDate.getFullYear();
     const minimumAgeSample = 15;
     const enrollmentRequestSample: EnrollStudentInputData = {
         studentName: 'Ana Silva',
         studentCpf: '832.081.519-34',
-        studentBirthDate: `${currentYear - minimumAgeSample}-01-01`,
+        studentBirthDate: `${issueYear - minimumAgeSample}-01-01`,
         level: 'EM',
         module: '1',
         classroom: 'J',
         installments: 12,
+        currentDate: issueDate,
     };
     beforeEach(() => {
         enrollStudent = new EnrollStudent(new RepositoryMemoryFactory());
@@ -59,7 +61,7 @@ describe('Enroll student', () => {
     });
 
     it('Should not enroll student below minimum age', () => {
-        const OverBirthYear = currentYear - minimumAgeSample + 1;
+        const OverBirthYear = issueYear - minimumAgeSample + 1;
         expect(() =>
             enrollStudent.execute({
                 ...enrollmentRequestSample,

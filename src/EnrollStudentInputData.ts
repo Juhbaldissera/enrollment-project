@@ -6,6 +6,7 @@ export class EnrollStudentInputData {
     module: string;
     classroom: string;
     installments: number;
+    currentDate: Date;
 
     constructor({
         studentName,
@@ -15,6 +16,7 @@ export class EnrollStudentInputData {
         module,
         classroom,
         installments,
+        currentDate,
     }: {
         studentName: string;
         studentCpf: string;
@@ -23,6 +25,7 @@ export class EnrollStudentInputData {
         module: string;
         classroom: string;
         installments: number;
+        currentDate: Date;
     }) {
         this.studentName = studentName;
         this.studentCpf = studentCpf;
@@ -31,5 +34,6 @@ export class EnrollStudentInputData {
         this.module = module;
         this.classroom = classroom;
         this.installments = installments;
+        this.currentDate = new Date(currentDate);
     }
 }

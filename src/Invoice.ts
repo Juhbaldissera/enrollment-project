@@ -14,7 +14,7 @@ export class Invoice {
         this.year = year;
         this.amount = amount;
         this.events = [];
-        this.dueDate = new Date(year, month - 1, 5);
+        this.dueDate = new Date(year, month - 1, 5, 4);
     }
 
     addEvent(invoiceEvent: InvoiceEvent): void {

@@ -18,7 +18,7 @@ export class Enrollment {
     status: 'active' | 'cancelled';
 
     constructor(issueDate: Date, student: Student, sequence: number, clazz: Class, installments: number) {
-        if (student.getAge() < clazz.module.minimumAge) {
+        if (student.getAge(issueDate) < clazz.module.minimumAge) {
             throw new Error('Student below minimum age');
         }
         if (clazz.isAlreadyFinished(issueDate)) {
